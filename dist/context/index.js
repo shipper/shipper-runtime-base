@@ -11,23 +11,34 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
  */
-var Agent, Context, Facility, modules, uuid, _;
-
-modules = require('../modules');
-
-Agent = require('../data/types/agent');
-
-Facility = require('../data/types/facility');
+var Context, uuid, _;
 
 uuid = require('node-uuid');
 
 _ = require('lodash');
 
 Context = (function() {
+  Context.modules = {};
+
+  Context.setModules = function(modules) {
+    if (!_.isPlainObject(modules)) {
+      throw new TypeError('Modules is expected to be an object');
+    }
+    return Context.modules = modules;
+  };
+
   function Context() {
     this.moduleInstances = {};
     this.id = uuid.v4();
   }
+
+  Context.prototype.setAgentType = function(type) {
+    return this.agentType = type;
+  };
+
+  Context.prototype.setFacilityType = function(type) {
+    return this.facilityType = type;
+  };
 
   Context.prototype.getModule = function(moduleName) {
     var module, name;
@@ -35,7 +46,7 @@ Context = (function() {
     if (this.moduleInstances[name] != null) {
       return this.moduleInstances[name];
     }
-    module = modules[name];
+    module = Context.modules[name];
     if ((module == null) || !(module instanceof Function)) {
       throw new Error("Unknown module: " + moduleName);
     }
@@ -43,7 +54,7 @@ Context = (function() {
   };
 
   Context.prototype.getModuleKeys = function() {
-    return _.keys(modules);
+    return _.keys(Context.modules);
   };
 
   Context.prototype.getModules = function() {
@@ -64,7 +75,7 @@ Context = (function() {
   };
 
   Context.prototype.setAgent = function(agent) {
-    if (!(agent instanceof Agent)) {
+    if (!(!this.agentType || agent instanceof this.agentType)) {
       throw new TypeError('Agent expected');
     }
     if ((this.agent != null) && this.agent.id !== agent.id) {
@@ -85,7 +96,7 @@ Context = (function() {
   };
 
   Context.prototype.setFacility = function(facility) {
-    if (!(facility instanceof Facility)) {
+    if (!(!this.facilityType || facility instanceof this.facilityType)) {
       throw new TypeError('Facility expected');
     }
     return this.facility = facility;

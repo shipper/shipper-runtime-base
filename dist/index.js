@@ -35,7 +35,7 @@ Protocol = require('./modules/base/protocol');
 
 SocketClient = require('./transports/socket/client');
 
-SocketTransport = require('./transport/socket');
+SocketTransport = require('./transports/socket');
 
 SocketResponse = require('./transports/socket/response');
 

@@ -17,7 +17,7 @@ schemajs = require('schemajs');
 
 Q = require('q');
 
-ValidationError = require('../../data/errors/validation');
+ValidationError = require('../../errors/validation');
 
 module.exports = {
   defineCommand: function(protocol, options) {

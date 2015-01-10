@@ -20,6 +20,10 @@ _ = require('lodash');
 Context = (function() {
   Context.modules = {};
 
+  Context.agentType = void 0;
+
+  Context.facilityType = void 0;
+
   Context.setModules = function(modules) {
     if (!_.isPlainObject(modules)) {
       throw new TypeError('Modules is expected to be an object');
@@ -27,18 +31,24 @@ Context = (function() {
     return Context.modules = modules;
   };
 
+  Context.setAgentType = function(type) {
+    if (type == null) {
+      type = void 0;
+    }
+    return Context.agentType = type;
+  };
+
+  Context.setFacilityType = function(type) {
+    if (type == null) {
+      type = void 0;
+    }
+    return Context.facilityType = type;
+  };
+
   function Context() {
     this.moduleInstances = {};
     this.id = uuid.v4();
   }
-
-  Context.prototype.setAgentType = function(type) {
-    return this.agentType = type;
-  };
-
-  Context.prototype.setFacilityType = function(type) {
-    return this.facilityType = type;
-  };
 
   Context.prototype.getModule = function(moduleName) {
     var module, name;
@@ -75,7 +85,7 @@ Context = (function() {
   };
 
   Context.prototype.setAgent = function(agent) {
-    if (!(!this.agentType || agent instanceof this.agentType)) {
+    if (!(!Context.agentType || agent instanceof Context.agentType)) {
       throw new TypeError('Agent expected');
     }
     if ((this.agent != null) && this.agent.id !== agent.id) {
@@ -96,7 +106,7 @@ Context = (function() {
   };
 
   Context.prototype.setFacility = function(facility) {
-    if (!(!this.facilityType || facility instanceof this.facilityType)) {
+    if (!(!Context.facilityType || facility instanceof Context.facilityType)) {
       throw new TypeError('Facility expected');
     }
     return this.facility = facility;

@@ -14,11 +14,15 @@ uuid      = require( 'node-uuid' )
 _         = require( 'lodash' )
 
 class Context
+  @modules: { }
+  @setModules: ( modules ) ->
+    unless _.isPlainObject( modules )
+      throw new TypeError( 'Modules is expected to be an object' )
+    Context.modules = modules
 
   constructor: ->
     @moduleInstances = { }
     @id = uuid.v4( )
-    @modules = { }
 
   setAgentType: ( type ) ->
     @agentType = type
@@ -26,16 +30,11 @@ class Context
   setFacilityType: ( type ) ->
     @facilityType = type
 
-  setModules: ( modules ) ->
-    unless _.isPlainObject( modules )
-      throw new TypeError( 'Modules is expected to be an object' )
-    @modules = modules
-
   getModule: ( moduleName ) ->
     name = moduleName.toLowerCase( )
     if @moduleInstances[ name ]?
       return @moduleInstances[ name ]
-    module = @modules[ name ]
+    module = Context.modules[ name ]
     if not module? or module not instanceof Function
       throw new Error(
         "Unknown module: #{ moduleName }"
@@ -44,7 +43,7 @@ class Context
 
   getModuleKeys: ->
     return _.keys(
-      @modules
+      Context.modules
     )
 
   getModules: ->
@@ -98,9 +97,5 @@ class Context
       agent: @agent
       facility_key: @facility?.uuid
     }
-
-
-
-
 
 module.exports = Context

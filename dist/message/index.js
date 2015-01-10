@@ -15,7 +15,7 @@ var Message, ValidationError, schema, _;
 
 schema = require('./schema');
 
-ValidationError = require('../data/errors/validation');
+ValidationError = require('../errors/validation');
 
 _ = require('lodash');
 

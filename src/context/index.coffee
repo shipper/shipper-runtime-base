@@ -15,20 +15,22 @@ _         = require( 'lodash' )
 
 class Context
   @modules: { }
+  @agentType: undefined
+  @facilityType: undefined
   @setModules: ( modules ) ->
     unless _.isPlainObject( modules )
       throw new TypeError( 'Modules is expected to be an object' )
     Context.modules = modules
 
+  @setAgentType: ( type = undefined ) ->
+    Context.agentType = type
+
+  @setFacilityType: ( type = undefined ) ->
+    Context.facilityType = type
+
   constructor: ->
     @moduleInstances = { }
     @id = uuid.v4( )
-
-  setAgentType: ( type ) ->
-    @agentType = type
-
-  setFacilityType: ( type ) ->
-    @facilityType = type
 
   getModule: ( moduleName ) ->
     name = moduleName.toLowerCase( )
@@ -60,7 +62,7 @@ class Context
     )
 
   setAgent: ( agent ) ->
-    unless not @agentType or agent instanceof @agentType
+    unless not Context.agentType or agent instanceof Context.agentType
       throw new TypeError( 'Agent expected' )
     if @agent? and @agent.id isnt agent.id
       throw new Error( 'Context already has an agent' )
@@ -75,7 +77,7 @@ class Context
     return @agent
 
   setFacility: ( facility ) ->
-    unless not @facilityType or facility instanceof @facilityType
+    unless not Context.facilityType or facility instanceof Context.facilityType
       throw new TypeError( 'Facility expected' )
     @facility = facility
 

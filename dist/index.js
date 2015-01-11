@@ -41,6 +41,8 @@ SocketResponse = require('./transports/socket/response');
 
 initialize = require('./initialize');
 
+require('./extensions');
+
 module.exports = {
   initialize: initialize,
   Context: Context,

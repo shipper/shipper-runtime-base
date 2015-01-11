@@ -25,6 +25,8 @@ SocketTransport = require( './transports/socket' )
 SocketResponse = require( './transports/socket/response' )
 initialize = require( './initialize' )
 
+require( './extensions' ) # Load extension methods
+
 module.exports =
   initialize: initialize
   # Types

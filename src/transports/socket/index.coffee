@@ -13,7 +13,7 @@ limitations under the License.
 Client = require( './client' )
 
 class SocketTransport
-  constructor: ( @wsServer ) ->
+  constructor: ( @wsServer, @capabilities = undefined ) ->
 
     wsServer.on( 'request', ( request ) =>
       new Client( @, request )

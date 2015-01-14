@@ -24,6 +24,14 @@ class SocketClient
 
     @context = new Context( )
 
+    if @transport.capabilities?
+      @send({
+        module: 'default'
+        protocol: 'default'
+        command: 'capabilities'
+        payload: capabilities
+      })
+
     @connection.on( 'message', @onMessage.bind( @ ) )
 
     @connection.on( 'close', =>

@@ -13,7 +13,7 @@ limitations under the License.
 WebSocketServer = require( 'websocket' ).server
 SocketTransport = require( './transports/socket' )
 
-initialize = ( httpServer ) ->
+initialize = ( httpServer, capabilities = undefined ) ->
   if not httpServer
     throw new Error( 'An HTTP server is required' )
   if httpServer.server?
@@ -25,7 +25,7 @@ initialize = ( httpServer ) ->
   })
 
   return {
-    SocketTransport: new SocketTransport( wsServer )
+    SocketTransport: new SocketTransport( wsServer, capabilities )
   }
 
   
